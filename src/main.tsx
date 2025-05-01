@@ -6,6 +6,7 @@ import './index.css'
 
 const { darkAlgorithm } = theme;
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ConfigProvider theme={{ algorithm: darkAlgorithm }}>

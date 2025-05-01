@@ -7,14 +7,14 @@ export type DrawFunction<T> = (context: T, frameCount: number, elapsedTime: numb
 type ContextType = '2d' | 'webgl' | 'webgl2';
 
 // handle canvas element resize, and pixel density as per https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio#correcting_resolution_in_a_canvas
-const resizeCanvas = (canvas: HTMLCanvasElement, contextType: ContextType, forceResize: boolean = false): boolean => {
-  let resized: boolean = false;
+const resizeCanvas = (canvas: HTMLCanvasElement, contextType: ContextType, forceResize = false): boolean => {
+  let resized = false;
 
   // TODO use a seemingly more accurate method, as described here: https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
   const { width, height } = canvas.getBoundingClientRect();
 
   if (forceResize || canvas.width !== width || canvas.height !== height) {
-    const scale = window?.devicePixelRatio ? window.devicePixelRatio : 1; // if not present, assume pixel ratio 1
+    const scale = window.devicePixelRatio ? window.devicePixelRatio : 1; // if not present, assume pixel ratio 1
     const context = canvas.getContext(contextType);
 
     const newWidth = Math.floor(width * scale);
@@ -45,7 +45,7 @@ export default function useCanvas<T extends RenderingContext>({ contextType, dra
 
   useEffect(() => {
     // to provide the frame update to the draw function
-    let frameCount: number = 0;
+    let frameCount = 0;
     // to be able to calculate amount of time passed between draws
     let lastDrawTimestamp: number;
     // to cancel the animation frame request via clean up function
@@ -57,7 +57,7 @@ export default function useCanvas<T extends RenderingContext>({ contextType, dra
       resizeCanvas(canvasRef.current, contextType, firstDraw);
       setFirstDraw(false);
 
-      canvasContextRef.current = canvasRef.current?.getContext(contextType);
+      canvasContextRef.current = canvasRef.current.getContext(contextType);
 
       // to progressively update frames
       const updateFrame = (): void => {

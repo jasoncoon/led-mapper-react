@@ -52,7 +52,7 @@ function App() {
           theme="dark"
           mode="horizontal"
           selectedKeys={selectedKeys}
-          onSelect={(info) => setSelectedKeys(info.selectedKeys)}
+          onSelect={(info) => { setSelectedKeys(info.selectedKeys); }}
           items={[{ key: 'input', label: '1. Input' }, { key: 'Map Config', label: '2. Map Config' }]}
           style={{ flex: 1, minWidth: 0 }}
         />
@@ -62,7 +62,7 @@ function App() {
         <Content>
           <Splitter layout='vertical' onResize={setSizes}>
             <Splitter.Panel size={sizes[0]} style={{ paddingLeft: '1rem' }}>
-              {selectedKeys?.includes('input') && (
+              {selectedKeys.includes('input') && (
                 <Tabs
                   tabBarStyle={{ paddingTop: 0, marginTop: 0 }} style={{ paddingTop: 0, marginTop: 0 }}
                   items={[{
