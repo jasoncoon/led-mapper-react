@@ -2,8 +2,8 @@ import { GithubOutlined } from '@ant-design/icons';
 import { Button, Input, Layout, Menu, Space, Splitter, Tabs } from 'antd';
 import { useState } from 'react';
 import './App.css';
-import Canvas from './Canvas';
-import { DrawFunction } from './CanvasHook';
+import Canvas from './components/Canvas';
+import { DrawFunction } from './components/CanvasHook';
 import ExternalLink from './components/ExternalLink';
 
 const { Header, Content } = Layout;
