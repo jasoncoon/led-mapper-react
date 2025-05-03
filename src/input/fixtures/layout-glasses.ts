@@ -1,4 +1,4 @@
-import { Layout } from "../layout";
+import { LedMap } from "../layout";
 
 export const GlassesLayoutInput = `	0	1	2	3	4	5	6		7	8	9	10	11	12	13	
 30	29	28	27	26	25	24	23	22	21	20	19	18	17	16	15	14
@@ -8,7 +8,7 @@ export const GlassesLayoutInput = `	0	1	2	3	4	5	6		7	8	9	10	11	12	13
 97	96	95	94	93	92	91	90		89	88	87	86	85	84	83	82
 	98	99	100	101	102	103				104	105	106	107	108	109`;
 
-export const GlassesLayout: Layout = {
+export const GlassesLayout: LedMap = {
   duplicateIndices: [],
   gaps: [],
   height: 7,

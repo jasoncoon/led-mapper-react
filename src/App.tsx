@@ -1,51 +1,23 @@
 import { GithubOutlined } from '@ant-design/icons';
-import { Button, Input, Layout, Menu, Space, Splitter, Tabs } from 'antd';
+import { Layout as AntLayout, Input, Menu, Splitter, Tabs } from 'antd';
 import { useState } from 'react';
 import './App.css';
-import Canvas from './components/Canvas';
-import { DrawFunction } from './components/CanvasHook';
 import ExternalLink from './components/ExternalLink';
+import LayoutInput from './components/Input/Layout';
+import Preview from './components/Preview';
+import { GlassesLayoutInput } from './input/fixtures/layout-glasses';
+import { LedMap, parseLayoutText } from './input/layout';
 
-const { Header, Content } = Layout;
+const { Header, Content } = AntLayout;
 
 function App() {
   // const searchParams = new URLSearchParams(document.location.search)
-  const [sizes, setSizes] = useState<(number | string)[]>(['20%', '80%']);
+  const [sizes, setSizes] = useState<(number | string)[]>(['25%', '75%']);
   const [selectedKeys, setSelectedKeys] = useState<string[]>(['input']);
-
-  let elapsed = 0;
-  let fps = 0;
-
-  const onDraw: DrawFunction<CanvasRenderingContext2D> = (context, frameCount, elapsedTime) => {
-    elapsed += elapsedTime;
-
-    if (elapsed >= 1_000) {
-      fps = 1_000 / elapsedTime;
-      elapsed = 0;
-      console.log({ fps, frameCount, elapsedTime });
-    }
-
-    const height = context.canvas.height;
-    const width = context.canvas.width;
-
-    // const centerX = width / 2;
-    // const centerY = height / 2;
-
-    // console.log({ height, width, centerX, centerY });
-
-    context.fillStyle = "black";
-    context.fillRect(0, 0, width, height);
-
-    context.lineWidth = 1;
-    context.textBaseline = "top";
-    context.textAlign = "left";
-    context.font = `12px monospace`;
-    context.fillStyle = 'white';
-    context.fillText(`${fps.toLocaleString(undefined, { maximumFractionDigits: 1 })} FPS`, 10, 10);
-  };
+  const [ledMap, setLedMap] = useState<LedMap>(parseLayoutText(GlassesLayoutInput));
 
   return (
-    <Layout style={{ height: '100vh' }}>
+    <AntLayout style={{ height: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
         <div style={{ marginRight: '1rem' }}>LED Mapper</div>
         <Menu
@@ -53,12 +25,16 @@ function App() {
           mode="horizontal"
           selectedKeys={selectedKeys}
           onSelect={(info) => { setSelectedKeys(info.selectedKeys); }}
-          items={[{ key: 'input', label: '1. Input' }, { key: 'Map Config', label: '2. Map Config' }]}
+          items={[
+            { key: 'input', label: '1. Input' },
+            { key: 'config', label: '2. Map Config' },
+            { key: 'debug', label: 'Debug Info' }
+          ]}
           style={{ flex: 1, minWidth: 0 }}
         />
         <ExternalLink href="https://github.com" title="Source Code on GitHub"><GithubOutlined /></ExternalLink>
       </Header>
-      <Layout>
+      <AntLayout>
         <Content>
           <Splitter layout='vertical' onResize={setSizes}>
             <Splitter.Panel size={sizes[0]} style={{ paddingLeft: '1rem' }}>
@@ -68,14 +44,7 @@ function App() {
                   items={[{
                     key: 'layout',
                     label: 'Layout',
-                    children: <>
-                      Paste an LED layout copied from <ExternalLink href="https://sheets.google.com" >Google Sheets</ExternalLink> or other spreadsheet in tab-delimited text format, with a unique LED index in each cell. LED indices should start at zero. Cells without an LED should be empty.
-                      <Input.TextArea rows={4} />
-                      <Space.Compact>
-                        <Button size='small'>Parse Layout</Button>
-                        <Button size='small'>Copy</Button>
-                      </Space.Compact>
-                    </>
+                    children: <LayoutInput initialValue={GlassesLayoutInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
                   }, {
                     key: 'coordinates',
                     label: 'Coordinates',
@@ -87,18 +56,19 @@ function App() {
                   }, {
                     key: 'image',
                     label: 'Image'
-                  }]} />)}
+                  }]} />
+              )}
+              {selectedKeys.includes('debug') && (
+                <pre>{JSON.stringify(ledMap, null, 2)}</pre>
+              )}
             </Splitter.Panel>
             <Splitter.Panel size={sizes[1]}>
-              <Canvas<CanvasRenderingContext2D>
-                contextType={'2d'}
-                draw={onDraw}
-                style={{ height: 'calc(100% - 10px)', width: '100%' }}
-              /></Splitter.Panel>
+              <Preview ledMap={ledMap} />
+            </Splitter.Panel>
           </Splitter>
         </Content>
-      </Layout>
-    </Layout>
+      </AntLayout>
+    </AntLayout>
   )
 }
 

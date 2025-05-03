@@ -4,7 +4,7 @@ export interface LED {
   y: number;
 }
 
-export interface Layout {
+export interface LedMap {
   height: number;
   leds: LED[];
   maxX: number;
@@ -19,7 +19,7 @@ export interface Layout {
   gaps: number[];
 }
 
-export function parseLayoutText(text: string): Layout {
+export function parseLayoutText(text: string): LedMap {
   if (!text) throw new Error("Cannot parse layout from empty text.");
 
   // split the newline delimited text into lines
