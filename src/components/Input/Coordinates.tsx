@@ -23,13 +23,13 @@ export default function CoordinatesInput(
           try {
             const ledMap = parseCoordinatesText(value);
             onChange(ledMap);
-            message.success(`Parsed layout with ${ledMap.leds.length.toLocaleString()} LEDs`);
+            message.success(`Parsed coordinates with ${ledMap.leds.length.toLocaleString()} LEDs`);
           } catch (error) {
             message.error((error as Error).message);
           }
         }
         }>Parse Layout</Button>
-        <Button size='small' onClick={async () => await navigator.clipboard.writeText(value)}>Copy</Button>
+        <Button size='small' onClick={async () => { await navigator.clipboard.writeText(value); }}>Copy</Button>
       </Space.Compact>
     </>
   );

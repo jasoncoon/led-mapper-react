@@ -1,25 +1,26 @@
 import { expect, test } from "vitest";
 import { parseCoordinatesText } from "./coordinates";
 import {
-  GlassesCoordinates,
-  GlassesCoordinatesInput,
-} from "./fixtures/coordinates-glasses";
+  GlassesPixelblaze,
+  GlassesPixelblazeInput,
+} from "./fixtures/pixelblaze-glasses";
+import { parsePixelblazeText } from "./pixelblaze";
 
 test("parsing empty text throws error", () => {
-  expect(() => parseCoordinatesText("")).toThrowError(
-    "Cannot parse empty coordinates."
+  expect(() => parsePixelblazeText("")).toThrowError(
+    "Cannot parse empty Pixelblaze map."
   );
 });
 
-test("parsing text in coordinates throws an error", () => {
-  expect(() => parseCoordinatesText("0\t1\n1\ta")).toThrowError(
-    'The value "a" at row 1, column 1 is not a number.'
+test("parsing empty text throws error", () => {
+  expect(() => parsePixelblazeText("0\t1\n1\ta")).toThrowError(
+    "Unexpected non-whitespace character after JSON at position 2"
   );
 });
 
 test("parse glasses", () => {
-  expect(parseCoordinatesText(GlassesCoordinatesInput)).toEqual(
-    GlassesCoordinates
+  expect(parsePixelblazeText(GlassesPixelblazeInput)).toEqual(
+    GlassesPixelblaze
   );
 });
 

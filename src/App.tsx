@@ -1,13 +1,15 @@
 import { GithubOutlined } from '@ant-design/icons';
-import { Layout as AntLayout, Divider, Input, Menu, Tabs } from 'antd';
+import { Layout as AntLayout, Divider, Menu, Tabs } from 'antd';
 import { useState } from 'react';
 import './App.css';
 import ExternalLink from './components/ExternalLink';
 import CoordinatesInput from './components/Input/Coordinates';
 import LayoutInput from './components/Input/Layout';
+import PixelblazeInput from './components/Input/PixelBlaze';
 import Preview from './components/Preview';
 import { GlassesCoordinatesInput } from './input/fixtures/coordinates-glasses';
 import { GlassesLayoutInput } from './input/fixtures/layout-glasses';
+import { GlassesPixelblazeInput } from './input/fixtures/pixelblaze-glasses';
 import { parseLayoutText } from './input/layout';
 import { LedMap } from './types';
 
@@ -39,7 +41,6 @@ function App() {
       <Content>
         {selectedKeys.includes('input') && (
           <Tabs
-            tabBarStyle={{ paddingTop: 0, marginTop: 0 }} style={{ paddingTop: 0, marginTop: 0 }}
             items={[{
               key: 'layout',
               label: 'Layout',
@@ -51,7 +52,7 @@ function App() {
             }, {
               key: 'pixelblaze',
               label: 'Pixelblaze Map',
-              children: <Input.TextArea rows={4} />
+              children: <PixelblazeInput initialValue={GlassesPixelblazeInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
             }, {
               key: 'image',
               label: 'Image'
