@@ -1,15 +1,12 @@
 import { GithubOutlined } from '@ant-design/icons';
-import { Layout as AntLayout, Divider, Menu, Tabs } from 'antd';
+import { Layout as AntLayout, Divider, Menu } from 'antd';
 import { useState } from 'react';
 import './App.css';
 import ExternalLink from './components/ExternalLink';
-import CoordinatesInput from './components/Input/Coordinates';
-import LayoutInput from './components/Input/Layout';
-import PixelblazeInput from './components/Input/PixelBlaze';
+import LedMapInput from './components/Input/LedMapInput';
+import LedMapOutput from './components/LedMapOutput';
 import Preview from './components/Preview';
-import { GlassesCoordinatesInput } from './input/fixtures/coordinates-glasses';
 import { GlassesLayoutInput } from './input/fixtures/layout-glasses';
-import { GlassesPixelblazeInput } from './input/fixtures/pixelblaze-glasses';
 import { parseLayoutText } from './input/layout';
 import { LedMap } from './types';
 
@@ -31,7 +28,8 @@ function App() {
           onSelect={(info) => { setSelectedKeys(info.selectedKeys); }}
           items={[
             { key: 'input', label: '1. Input' },
-            { key: 'config', label: '2. Map Config' },
+            { key: 'config', label: '2. Config' },
+            { key: 'output', label: '3. Output' },
             { key: 'debug', label: 'Debug Info' }
           ]}
           style={{ flex: 1, minWidth: 0 }}
@@ -40,26 +38,13 @@ function App() {
       </Header>
       <Content>
         {selectedKeys.includes('input') && (
-          <Tabs
-            items={[{
-              key: 'layout',
-              label: 'Layout',
-              children: <LayoutInput initialValue={GlassesLayoutInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
-            }, {
-              key: 'coordinates',
-              label: 'Coordinates',
-              children: <CoordinatesInput initialValue={GlassesCoordinatesInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
-            }, {
-              key: 'pixelblaze',
-              label: 'Pixelblaze Map',
-              children: <PixelblazeInput initialValue={GlassesPixelblazeInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
-            }, {
-              key: 'image',
-              label: 'Image'
-            }]} />
+          <LedMapInput onChange={(ledMap) => { setLedMap(ledMap); }} />
         )}
         {selectedKeys.includes('debug') && (
           <pre>{JSON.stringify(ledMap, null, 2)}</pre>
+        )}
+        {selectedKeys.includes('output') && (
+          <LedMapOutput ledMap={ledMap} />
         )}
         <Divider style={{ margin: '4px 0px' }} />
         <Preview ledMap={ledMap} />
