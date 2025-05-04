@@ -1,4 +1,4 @@
-import { LedMap } from "../layout";
+import { LedMap } from "../../types";
 
 export const GlassesLayoutInput = `	0	1	2	3	4	5	6		7	8	9	10	11	12	13	
 30	29	28	27	26	25	24	23	22	21	20	19	18	17	16	15	14
@@ -568,6 +568,8 @@ export const GlassesLayout: LedMap = {
   maxIndex: 109,
   maxX: 16,
   maxY: 6,
+  middleX: 8,
+  middleY: 3,
   minIndex: 0,
   minX: 0,
   minY: 0,

@@ -58,6 +58,8 @@ test("finds duplicate indices", () => {
     maxIndex: 4,
     maxX: 5,
     maxY: 0,
+    middleX: 2.5,
+    middleY: 0,
     minIndex: 0,
     minX: 0,
     minY: 0,

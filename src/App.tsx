@@ -1,12 +1,15 @@
 import { GithubOutlined } from '@ant-design/icons';
-import { Layout as AntLayout, Input, Menu, Tabs } from 'antd';
+import { Layout as AntLayout, Divider, Input, Menu, Tabs } from 'antd';
 import { useState } from 'react';
 import './App.css';
 import ExternalLink from './components/ExternalLink';
+import CoordinatesInput from './components/Input/Coordinates';
 import LayoutInput from './components/Input/Layout';
 import Preview from './components/Preview';
+import { GlassesCoordinatesInput } from './input/fixtures/coordinates-glasses';
 import { GlassesLayoutInput } from './input/fixtures/layout-glasses';
-import { LedMap, parseLayoutText } from './input/layout';
+import { parseLayoutText } from './input/layout';
+import { LedMap } from './types';
 
 const { Header, Content } = AntLayout;
 
@@ -16,7 +19,7 @@ function App() {
   const [ledMap, setLedMap] = useState<LedMap>(parseLayoutText(GlassesLayoutInput));
 
   return (
-    <AntLayout style={{ height: '100vh' }}>
+    <AntLayout style={{ height: '100%' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
         <div style={{ marginRight: '1rem' }}>LED Mapper</div>
         <Menu
@@ -33,34 +36,33 @@ function App() {
         />
         <ExternalLink href="https://github.com/jasoncoon/led-mapper-react" title="Source Code on GitHub"><GithubOutlined /></ExternalLink>
       </Header>
-      <AntLayout>
-        <Content>
-          {selectedKeys.includes('input') && (
-            <Tabs
-              tabBarStyle={{ paddingTop: 0, marginTop: 0 }} style={{ paddingTop: 0, marginTop: 0 }}
-              items={[{
-                key: 'layout',
-                label: 'Layout',
-                children: <LayoutInput initialValue={GlassesLayoutInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
-              }, {
-                key: 'coordinates',
-                label: 'Coordinates',
-                children: <Input.TextArea rows={4} />
-              }, {
-                key: 'pixelblaze',
-                label: 'Pixelblaze Map',
-                children: <Input.TextArea rows={4} />
-              }, {
-                key: 'image',
-                label: 'Image'
-              }]} />
-          )}
-          {selectedKeys.includes('debug') && (
-            <pre>{JSON.stringify(ledMap, null, 2)}</pre>
-          )}
-          <Preview ledMap={ledMap} />
-        </Content>
-      </AntLayout>
+      <Content>
+        {selectedKeys.includes('input') && (
+          <Tabs
+            tabBarStyle={{ paddingTop: 0, marginTop: 0 }} style={{ paddingTop: 0, marginTop: 0 }}
+            items={[{
+              key: 'layout',
+              label: 'Layout',
+              children: <LayoutInput initialValue={GlassesLayoutInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
+            }, {
+              key: 'coordinates',
+              label: 'Coordinates',
+              children: <CoordinatesInput initialValue={GlassesCoordinatesInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
+            }, {
+              key: 'pixelblaze',
+              label: 'Pixelblaze Map',
+              children: <Input.TextArea rows={4} />
+            }, {
+              key: 'image',
+              label: 'Image'
+            }]} />
+        )}
+        {selectedKeys.includes('debug') && (
+          <pre>{JSON.stringify(ledMap, null, 2)}</pre>
+        )}
+        <Divider style={{ margin: '4px 0px' }} />
+        <Preview ledMap={ledMap} />
+      </Content>
     </AntLayout>
   )
 }

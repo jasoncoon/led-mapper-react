@@ -1,6 +1,6 @@
 import { Checkbox, Radio, Space } from "antd";
 import { useState } from "react";
-import { LedMap } from "../input/layout";
+import { LedMap } from "../types";
 import Canvas from "./Canvas";
 import { DrawFunction } from "./CanvasHook";
 

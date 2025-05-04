@@ -37,6 +37,15 @@ export default tseslint.config(
       ],
       ...reactX.configs["recommended-typescript"].rules,
       ...reactDom.configs.recommended.rules,
+      "@typescript-eslint/no-misused-promises": [
+        "error",
+        {
+          checksVoidReturn: {
+            arguments: false,
+            attributes: false,
+          },
+        },
+      ],
     },
   }
 );

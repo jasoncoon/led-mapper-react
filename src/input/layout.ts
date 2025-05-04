@@ -1,24 +1,4 @@
-export interface LED {
-  index: number;
-  x: number;
-  y: number;
-}
-
-export interface LedMap {
-  duplicateIndices: number[];
-  gaps: number[];
-  height: number;
-  input: string;
-  leds: LED[];
-  maxIndex: number;
-  maxX: number;
-  maxY: number;
-  minIndex: number;
-  minX: number;
-  minY: number;
-  rows: number[][];
-  width: number;
-}
+import { LED, LedMap } from "../types";
 
 export function parseLayoutText(input: string): LedMap {
   if (!input) throw new Error("Cannot parse empty layout.");
@@ -42,7 +22,7 @@ export function parseLayoutText(input: string): LedMap {
           `The value "${column}" at row ${rowIndex.toString()}, column ${columnIndex.toString()} is not a number or empty cell.`
         );
       }
-      return parseInt(column);
+      return value;
     });
   });
 
@@ -55,9 +35,6 @@ export function parseLayoutText(input: string): LedMap {
   let minX, minY, maxX, maxY, minIndex, maxIndex;
 
   const duplicateIndices: number[] = [];
-
-  // minX = minY = minIndex = Number.MAX_VALUE;
-  // maxX = maxY = maxIndex = Number.MIN_VALUE;
 
   for (let y = 0; y < rows.length; y++) {
     const row = rows[y];
@@ -100,9 +77,6 @@ export function parseLayoutText(input: string): LedMap {
   if (minIndex === undefined)
     throw new Error("Layout contains no numbers, minIndex is undefined.");
 
-  const width = maxX - minX + 1;
-  const height = maxY - minY + 1;
-
   let previousIndex = -1;
   const gaps = [];
   const sorted = [...leds].sort((a, b) => a.index - b.index);
@@ -115,20 +89,22 @@ export function parseLayoutText(input: string): LedMap {
     previousIndex = index;
   }
 
-  const result = {
+  const result: LedMap = {
     duplicateIndices,
     gaps,
-    height,
+    height: maxY - minY + 1,
     input,
     leds,
     maxIndex,
     maxX,
     maxY,
+    middleX: (maxX - minX) / 2,
+    middleY: (maxY - minY) / 2,
     minIndex,
     minX,
     minY,
     rows,
-    width,
+    width: maxX - minX + 1,
   };
 
   return result;
