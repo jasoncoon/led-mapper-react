@@ -3,9 +3,7 @@ import { GlassesLayout, GlassesLayoutInput } from "./fixtures/layout-glasses";
 import { parseLayoutText } from "./layout";
 
 test("parsing empty text throws error", () => {
-  expect(() => parseLayoutText("")).toThrowError(
-    "Cannot parse layout from empty text."
-  );
+  expect(() => parseLayoutText("")).toThrowError("Cannot parse empty layout.");
 });
 
 test("parsing empty text throws error", () => {
@@ -19,10 +17,12 @@ test("parse glasses layout", () => {
 });
 
 test("finds duplicate indices", () => {
-  expect(parseLayoutText(`0	1	2	0	3	4`)).toEqual({
+  const input = `0	1	2	0	3	4`;
+  expect(parseLayoutText(input)).toEqual({
     duplicateIndices: [0],
     gaps: [],
     height: 1,
+    input,
     leds: [
       {
         index: 0,

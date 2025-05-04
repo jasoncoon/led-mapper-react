@@ -1,5 +1,5 @@
 import { GithubOutlined } from '@ant-design/icons';
-import { Layout as AntLayout, Input, Menu, Splitter, Tabs } from 'antd';
+import { Layout as AntLayout, Input, Menu, Tabs } from 'antd';
 import { useState } from 'react';
 import './App.css';
 import ExternalLink from './components/ExternalLink';
@@ -12,7 +12,6 @@ const { Header, Content } = AntLayout;
 
 function App() {
   // const searchParams = new URLSearchParams(document.location.search)
-  const [sizes, setSizes] = useState<(number | string)[]>(['25%', '75%']);
   const [selectedKeys, setSelectedKeys] = useState<string[]>(['input']);
   const [ledMap, setLedMap] = useState<LedMap>(parseLayoutText(GlassesLayoutInput));
 
@@ -32,40 +31,34 @@ function App() {
           ]}
           style={{ flex: 1, minWidth: 0 }}
         />
-        <ExternalLink href="https://github.com" title="Source Code on GitHub"><GithubOutlined /></ExternalLink>
+        <ExternalLink href="https://github.com/jasoncoon/led-mapper-react" title="Source Code on GitHub"><GithubOutlined /></ExternalLink>
       </Header>
       <AntLayout>
         <Content>
-          <Splitter layout='vertical' onResize={setSizes}>
-            <Splitter.Panel size={sizes[0]} style={{ paddingLeft: '1rem' }}>
-              {selectedKeys.includes('input') && (
-                <Tabs
-                  tabBarStyle={{ paddingTop: 0, marginTop: 0 }} style={{ paddingTop: 0, marginTop: 0 }}
-                  items={[{
-                    key: 'layout',
-                    label: 'Layout',
-                    children: <LayoutInput initialValue={GlassesLayoutInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
-                  }, {
-                    key: 'coordinates',
-                    label: 'Coordinates',
-                    children: <Input.TextArea rows={4} />
-                  }, {
-                    key: 'pixelblaze',
-                    label: 'Pixelblaze Map',
-                    children: <Input.TextArea rows={4} />
-                  }, {
-                    key: 'image',
-                    label: 'Image'
-                  }]} />
-              )}
-              {selectedKeys.includes('debug') && (
-                <pre>{JSON.stringify(ledMap, null, 2)}</pre>
-              )}
-            </Splitter.Panel>
-            <Splitter.Panel size={sizes[1]}>
-              <Preview ledMap={ledMap} />
-            </Splitter.Panel>
-          </Splitter>
+          {selectedKeys.includes('input') && (
+            <Tabs
+              tabBarStyle={{ paddingTop: 0, marginTop: 0 }} style={{ paddingTop: 0, marginTop: 0 }}
+              items={[{
+                key: 'layout',
+                label: 'Layout',
+                children: <LayoutInput initialValue={GlassesLayoutInput} onChange={(ledMap) => { setLedMap(ledMap); }} />
+              }, {
+                key: 'coordinates',
+                label: 'Coordinates',
+                children: <Input.TextArea rows={4} />
+              }, {
+                key: 'pixelblaze',
+                label: 'Pixelblaze Map',
+                children: <Input.TextArea rows={4} />
+              }, {
+                key: 'image',
+                label: 'Image'
+              }]} />
+          )}
+          {selectedKeys.includes('debug') && (
+            <pre>{JSON.stringify(ledMap, null, 2)}</pre>
+          )}
+          <Preview ledMap={ledMap} />
         </Content>
       </AntLayout>
     </AntLayout>

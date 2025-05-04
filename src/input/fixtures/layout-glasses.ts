@@ -12,6 +12,7 @@ export const GlassesLayout: LedMap = {
   duplicateIndices: [],
   gaps: [],
   height: 7,
+  input: GlassesLayoutInput,
   leds: [
     {
       index: 0,

@@ -14,13 +14,6 @@ export default function Preview({ ledMap }: { ledMap?: LedMap }) {
   const offsetIncrement = 0.001;
 
   const onDraw: DrawFunction<CanvasRenderingContext2D> = (context, _frameCount, elapsedTime) => {
-    elapsed += elapsedTime;
-
-    if (elapsed >= 1_000) {
-      fps = 1_000 / elapsedTime;
-      elapsed = 0;
-    }
-
     if (!ledMap) return;
 
     const { leds, minX, minY, height, width } = ledMap;
@@ -33,9 +26,17 @@ export default function Preview({ ledMap }: { ledMap?: LedMap }) {
     const canvasHeight = context.canvas.height;
     const canvasWidth = context.canvas.width;
 
-    const ledDiameter = Math.max(canvasWidth, canvasHeight) / Math.max(width, height);
+    const ledDiameter = Math.min(canvasWidth, canvasHeight) / Math.max(width, height);
 
     const ledCenter = ledDiameter / 2;
+
+    elapsed += elapsedTime;
+
+    if (elapsed >= 1_000) {
+      fps = 1_000 / elapsedTime;
+      elapsed = 0;
+      // console.log({ canvasHeight, canvasWidth, width, height, ledDiameter, ledCenter });
+    }
 
     context.globalCompositeOperation = "source-over";
     context.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -75,12 +76,10 @@ export default function Preview({ ledMap }: { ledMap?: LedMap }) {
       context.fillStyle = 'white';
       context.fillText(`${fps.toLocaleString(undefined, { maximumFractionDigits: 1 })} FPS`, 10, 10);
     }
-
-    // console.log({ canvasHeight, canvasWidth, width, height, ledDiameter, ledCenter });
   };
 
   return (
-    <>
+    <Space direction="vertical">
       <Space>
         <Radio.Group
           block
@@ -100,8 +99,8 @@ export default function Preview({ ledMap }: { ledMap?: LedMap }) {
       <Canvas<CanvasRenderingContext2D>
         contextType={'2d'}
         draw={onDraw}
-        style={{ height: 'calc(100% - 32px)', width: '100%' }} // TODO: auto resize canvas
+        style={{ minHeight: 400, height: 'calc(100% - 32px)', width: '100%' }} // TODO: auto resize canvas
       />
-    </>
+    </Space>
   );
 }

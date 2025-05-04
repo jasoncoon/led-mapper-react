@@ -5,25 +5,26 @@ export interface LED {
 }
 
 export interface LedMap {
+  duplicateIndices: number[];
+  gaps: number[];
   height: number;
+  input: string;
   leds: LED[];
+  maxIndex: number;
   maxX: number;
   maxY: number;
+  minIndex: number;
   minX: number;
   minY: number;
   rows: number[][];
   width: number;
-  minIndex: number;
-  maxIndex: number;
-  duplicateIndices: number[];
-  gaps: number[];
 }
 
-export function parseLayoutText(text: string): LedMap {
-  if (!text) throw new Error("Cannot parse layout from empty text.");
+export function parseLayoutText(input: string): LedMap {
+  if (!input) throw new Error("Cannot parse empty layout.");
 
   // split the newline delimited text into lines
-  const lines = text.split("\n");
+  const lines = input.split("\n");
 
   if (!lines.length) {
     throw new Error("Layout text contains no lines.");
@@ -115,18 +116,19 @@ export function parseLayoutText(text: string): LedMap {
   }
 
   const result = {
+    duplicateIndices,
+    gaps,
     height,
+    input,
     leds,
+    maxIndex,
     maxX,
     maxY,
+    minIndex,
     minX,
     minY,
     rows,
     width,
-    minIndex,
-    maxIndex,
-    duplicateIndices,
-    gaps,
   };
 
   return result;
