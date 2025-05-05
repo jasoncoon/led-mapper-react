@@ -63,7 +63,6 @@ test("finds duplicate indices", () => {
     minIndex: 0,
     minX: 0,
     minY: 0,
-    rows: [[0, 1, 2, 0, 3, 4]],
     width: 6,
   });
 });

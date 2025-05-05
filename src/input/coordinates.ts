@@ -36,15 +36,31 @@ export function parseCoordinatesText(input: string): LedMap {
 
   const leds: LED[] = [];
 
-  let minX, minY, maxX, maxY, minIndex, maxIndex;
-
-  const duplicateIndices: number[] = [];
-
   for (const row of rows) {
     const index = row[0];
     const x = row[1];
     const y = row[2];
 
+    leds.push({
+      index,
+      x,
+      y,
+    });
+  }
+
+  return loadLedMap(leds, input);
+}
+
+export function loadLedMap(leds: LED[], input: string): LedMap {
+  let minX, minY, maxX, maxY, minIndex, maxIndex;
+
+  const duplicateIndices: number[] = [];
+
+  let previousIndex = -1;
+  const gaps = [];
+  const sortedLeds = [...leds].sort((a, b) => a.index - b.index);
+
+  for (const { index, x, y } of sortedLeds) {
     if (isNaN(index) || isNaN(x) || isNaN(y)) continue;
 
     if (minX === undefined || x < minX) minX = x;
@@ -56,47 +72,32 @@ export function parseCoordinatesText(input: string): LedMap {
     if (minIndex === undefined || index < minIndex) minIndex = index;
     if (maxIndex === undefined || index > maxIndex) maxIndex = index;
 
-    if (leds.some((l) => l.index === index)) {
-      duplicateIndices.push(index);
+    if (leds.filter((l) => l.index === index).length > 1) {
+      if (!duplicateIndices.includes(index)) {
+        duplicateIndices.push(index);
+      }
     }
 
-    leds.push({
-      index,
-      x,
-      y,
-    });
+    if (index - 1 !== previousIndex && !duplicateIndices.includes(index)) {
+      gaps.push(index);
+    }
+    previousIndex = index;
   }
 
-  if (maxX === undefined)
-    throw new Error("Layout contains no numbers, maxX is undefined.");
-  if (minX === undefined)
-    throw new Error("Layout contains no numbers, minX is undefined.");
-  if (maxY === undefined)
-    throw new Error("Layout contains no numbers, maxY is undefined.");
-  if (minY === undefined)
-    throw new Error("Layout contains no numbers, minY is undefined.");
+  if (maxX === undefined) throw new Error("LEDs empty, maxX is undefined.");
+  if (minX === undefined) throw new Error("LEDs empty, minX is undefined.");
+  if (maxY === undefined) throw new Error("LEDs empty, maxY is undefined.");
+  if (minY === undefined) throw new Error("LEDs empty, minY is undefined.");
   if (maxIndex === undefined)
-    throw new Error("Layout contains no numbers, maxIndex is undefined.");
+    throw new Error("LEDs empty, maxIndex is undefined.");
   if (minIndex === undefined)
-    throw new Error("Layout contains no numbers, minIndex is undefined.");
+    throw new Error("LEDs empty, minIndex is undefined.");
 
   const width = maxX - minX + 1;
   const height = maxY - minY + 1;
 
   const middleX = (maxX - minX) / 2;
   const middleY = (maxY - minY) / 2;
-
-  let previousIndex = -1;
-  const gaps = [];
-  const sorted = [...leds].sort((a, b) => a.index - b.index);
-
-  for (const led of sorted) {
-    const index = led.index;
-    if (index - 1 !== previousIndex && !duplicateIndices.includes(index)) {
-      gaps.push(index);
-    }
-    previousIndex = index;
-  }
 
   return {
     duplicateIndices,
@@ -112,7 +113,6 @@ export function parseCoordinatesText(input: string): LedMap {
     minIndex,
     minX,
     minY,
-    rows,
     width,
   };
 }

@@ -2,6 +2,7 @@ import { App, Button, Input, Space } from "antd";
 import { useState } from "react";
 import { parseCoordinatesText } from "../../input/coordinates";
 import { LedMap } from "../../types";
+import CopyButton from "../CopyButton";
 import ExternalLink from "../ExternalLink";
 
 export default function CoordinatesInput(
@@ -13,7 +14,9 @@ export default function CoordinatesInput(
   return (
     <>
       Paste coordinates copied from
+      {' '}
       <ExternalLink href="https://sheets.google.com" >Google Sheets</ExternalLink>
+      {' '}
       or other spreadsheet in tab-delimited text format. It should have three columns: index, x, and y, with or without column headers.
       <Input.TextArea rows={7} value={value} onChange={(e) => {
         setValue(e.currentTarget.value);
@@ -28,8 +31,10 @@ export default function CoordinatesInput(
             message.error((error as Error).message);
           }
         }
-        }>Parse Layout</Button>
-        <Button size='small' onClick={async () => { await navigator.clipboard.writeText(value); }}>Copy</Button>
+        }>
+          Parse Layout
+        </Button>
+        <CopyButton value={value} />
       </Space.Compact>
     </>
   );

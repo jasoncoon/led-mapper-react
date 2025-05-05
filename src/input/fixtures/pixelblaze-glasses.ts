@@ -135,6 +135,5 @@ export const GlassesPixelblaze: LedMap = {
   minIndex: 0,
   minX: 0,
   minY: 0,
-  rows: JSON.parse(GlassesPixelblazeInput) as number[][],
   width: 17,
 };

@@ -2,6 +2,7 @@ import { App, Button, Input, Space } from "antd";
 import { useState } from "react";
 import { parseLayoutText } from "../../input/layout";
 import { LedMap } from "../../types";
+import CopyButton from "../CopyButton";
 import ExternalLink from "../ExternalLink";
 
 export default function LayoutInput(
@@ -14,7 +15,9 @@ export default function LayoutInput(
   return (
     <>
       Paste an LED layout copied from
+      {' '}
       <ExternalLink href="https://sheets.google.com" >Google Sheets</ExternalLink>
+      {' '}
       or other spreadsheet in tab-delimited text format, with a unique LED index in each cell.
       LED indices should start at zero. Cells without an LED should be empty.
       <Input.TextArea rows={7} value={value} onChange={(e) => {
@@ -31,7 +34,7 @@ export default function LayoutInput(
           }
         }
         }>Parse Layout</Button>
-        <Button size='small' onClick={async () => { await navigator.clipboard.writeText(value); }}>Copy</Button>
+        <CopyButton value={value} />
       </Space.Compact>
     </>
   );

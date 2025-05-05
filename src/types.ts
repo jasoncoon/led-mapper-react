@@ -18,6 +18,5 @@ export interface LedMap {
   minIndex: number;
   minX: number;
   minY: number;
-  rows: number[][];
   width: number;
 }

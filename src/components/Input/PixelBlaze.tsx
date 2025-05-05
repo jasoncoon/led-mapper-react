@@ -2,6 +2,7 @@ import { App, Button, Input, Space } from "antd";
 import { useState } from "react";
 import { parsePixelblazeText } from "../../input/pixelblaze";
 import { LedMap } from "../../types";
+import CopyButton from "../CopyButton";
 import ExternalLink from "../ExternalLink";
 
 export default function PixelblazeInput(
@@ -14,10 +15,16 @@ export default function PixelblazeInput(
   return (
     <>
       Paste data from your
+      {' '}
       <ExternalLink href="https://www.bhencke.com/mapping-in-pixelblaze">Pixelblaze</ExternalLink>
+      {' '}
       Mapper tab or
+      {' '}
       <ExternalLink href="http://app.bhencke.com/pixelmap.html">Image mapper</ExternalLink>
-      in JSON format. It should have one array of [x,y] per LED, all in an array: [[x1,y1],[x2,y2],...] Whitespace does not matter.
+      {' '}
+      in JSON format. It should have one array of [x,y] per LED, all in an array:
+      <code>[ [x,y], [x,y], ...]</code>
+      Whitespace does not matter.
       <Input.TextArea rows={7} value={value} onChange={(e) => {
         setValue(e.currentTarget.value);
       }} />
@@ -31,8 +38,10 @@ export default function PixelblazeInput(
             message.error((error as Error).message);
           }
         }
-        }>Parse Layout</Button>
-        <Button size='small' onClick={async () => { await navigator.clipboard.writeText(value); }}>Copy</Button>
+        }>
+          Parse Layout
+        </Button>
+        <CopyButton value={value} />
       </Space.Compact>
     </>
   );
