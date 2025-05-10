@@ -4,7 +4,7 @@ import { useState } from 'react';
 import './App.css';
 import ExternalLink from './components/ExternalLink';
 import LedMapInput from './components/Input/LedMapInput';
-import LedMapOutput from './components/LedMapOutput';
+import LedMapOutput from './components/Output/LedMapOutput';
 import Preview from './components/Preview';
 import { GlassesLayoutInput } from './input/fixtures/layout-glasses';
 import { parseLayoutText } from './input/layout';
