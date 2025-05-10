@@ -1,17 +1,69 @@
-import { Checkbox, Radio, Space } from "antd";
+import { Checkbox, Radio, Select, Space } from "antd";
 import { useState } from "react";
-import { LedMap } from "../types";
+import { LED, LedMap } from "../types";
 import Canvas from "./Canvas";
 import { DrawFunction } from "./CanvasHook";
+
+const PatternNames = [
+  'rainbow clockwise',
+  'rainbow counter-clockwise',
+  'rainbow down',
+  'rainbow in',
+  'rainbow index',
+  'rainbow left',
+  'rainbow out',
+  'rainbow right',
+  'rainbow up',
+] as const;
+type PatternType = typeof PatternNames[number];
 
 export default function Preview({ ledMap }: { ledMap?: LedMap }) {
   const [drawType, setDrawType] = useState<'leds' | 'numbers'>('numbers');
   const [drawFps, setDrawFps] = useState<boolean>(true);
+  const [pattern, setPattern] = useState<PatternType>('rainbow index');
 
   let elapsed = 0;
   let fps = 0;
   let offset = 0;
-  const offsetIncrement = 0.001;
+  const offsetIncrement = 0.005;
+
+  function getFillStyle(pattern: PatternType, led: LED): string {
+    if (!ledMap) return 'red';
+
+    const { height, leds, width } = ledMap;
+    const { length: ledCount } = leds;
+
+    switch (pattern) {
+      case 'rainbow clockwise':
+        return `hsl(${(((((led.angle ?? 0) / 360) - offset) % 1) * 360).toString()}, 100%, 50%)`;
+
+      case 'rainbow counter-clockwise':
+        return `hsl(${(((((led.angle ?? 0) / 360) + offset) % 1) * 360).toString()}, 100%, 50%)`;
+
+      case 'rainbow down':
+        return `hsl(${((((led.y / height) - offset) % 1) * 360).toString()}, 100%, 50%)`;
+
+      case 'rainbow in':
+        return `hsl(${(((((led.radius ?? 0) / (width / 2)) + offset) % 1) * 360).toString()}, 100%, 50%)`;
+
+      case 'rainbow left':
+        return `hsl(${((((led.x / width) + offset) % 1) * 360).toString()}, 100%, 50%)`;
+
+      case 'rainbow out':
+        return `hsl(${(((((led.radius ?? 0) / (width / 2)) - offset) % 1) * 360).toString()}, 100%, 50%)`;
+
+      case 'rainbow right':
+        return `hsl(${((((led.x / width) - offset) % 1) * 360).toString()}, 100%, 50%)`;
+
+      case 'rainbow up':
+        return `hsl(${((((led.y / height) + offset) % 1) * 360).toString()}, 100%, 50%)`;
+
+      case 'rainbow index':
+      default:
+        return `hsl(${((((led.index / ledCount) - offset) % 1) * 360).toString()}, 100%, 50%)`;
+    }
+
+  }
 
   const onDraw: DrawFunction<CanvasRenderingContext2D> = (context, _frameCount, elapsedTime) => {
     if (!ledMap) return;
@@ -47,9 +99,7 @@ export default function Preview({ ledMap }: { ledMap?: LedMap }) {
     context.font = `${(ledDiameter / 4).toString()}px monospace`;
 
     for (const led of leds) {
-      const hue = ((led.index / ledCount) + offset) % 1;
-
-      const fillStyle = `hsl(${(hue * 360).toString()}, 100%, 50%)`
+      const fillStyle = getFillStyle(pattern, led);
 
       const x = (led.x - minX) * ledDiameter;
       const y = (led.y - minY) * ledDiameter;
@@ -94,6 +144,8 @@ export default function Preview({ ledMap }: { ledMap?: LedMap }) {
           size="small"
           value={drawType}
         />
+        <Select popupMatchSelectWidth={false} value={pattern} onChange={(value) => { setPattern(value); }}
+          options={PatternNames.map(patternName => ({ key: patternName, label: patternName, value: patternName }))} />
         <Checkbox checked={drawFps} onChange={(e) => { setDrawFps(e.target.checked); }}>Show FPS</Checkbox>
       </Space>
       <Canvas<CanvasRenderingContext2D>

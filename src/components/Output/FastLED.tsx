@@ -28,36 +28,13 @@ export default function FastLedOutput({ ledMap }: { ledMap: LedMap }) {
 }
 
 function generateFastLedMapCode(ledMap: LedMap) {
-  const { middleX, middleY, leds, maxX, maxY, minX, minY } = ledMap;
+  const { leds, maxX, maxY, minX, minY } = ledMap;
 
-  let minX256, minY256, minAngle, minAngle256, minRadius, minRadius256;
-  let maxX256, maxY256, maxAngle, maxAngle256, maxRadius, maxRadius256;
+  let minX256, minY256, minAngle256, minRadius256;
+  let maxX256, maxY256, maxAngle256, maxRadius, maxRadius256;
 
-  minX256 = minY256 = minAngle = minAngle256 = minRadius = minRadius256 = Number.MAX_VALUE;
-  maxX256 = maxY256 = maxAngle = maxAngle256 = maxRadius = maxRadius256 = Number.MIN_VALUE;
-
-  // use the center defined by the user
-
-  // calculate the angle and radius for each LED, using the defined center
-  for (const led of leds) {
-    const { x, y } = led;
-
-    const radius = Math.sqrt(Math.pow(x - middleX, 2) + Math.pow(y - middleY, 2));
-    const radians = Math.atan2(middleY - y, middleX - x);
-
-    let angle = radians * (180 / Math.PI);
-    while (angle < 0) angle += 360;
-    while (angle > 360) angle -= 360;
-
-    if (angle < minAngle) minAngle = angle;
-    if (angle > maxAngle) maxAngle = angle;
-
-    if (radius < minRadius) minRadius = radius;
-    if (radius > maxRadius) maxRadius = radius;
-
-    led.angle = angle;
-    led.radius = radius;
-  }
+  minX256 = minY256 = minAngle256 = minRadius256 = Number.MAX_VALUE;
+  maxX256 = maxY256 = maxAngle256 = maxRadius = maxRadius256 = Number.MIN_VALUE;
 
   for (const led of leds) {
     const { x, y, angle, radius } = led;

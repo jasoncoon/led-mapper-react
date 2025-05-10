@@ -81,6 +81,7 @@ export function loadLedMap(leds: LED[], input: string): LedMap {
     if (index - 1 !== previousIndex && !duplicateIndices.includes(index)) {
       gaps.push(index);
     }
+
     previousIndex = index;
   }
 
@@ -99,18 +100,53 @@ export function loadLedMap(leds: LED[], input: string): LedMap {
   const middleX = (maxX - minX) / 2;
   const middleY = (maxY - minY) / 2;
 
+  let minAngle, minRadius;
+  let maxAngle, maxRadius;
+
+  minAngle = minRadius = Number.MAX_VALUE;
+  maxAngle = maxRadius = Number.MIN_VALUE;
+
+  // use the center defined by the user
+
+  // calculate the angle and radius for each LED, using the defined center
+  for (const led of leds) {
+    const { x, y } = led;
+
+    const radius = Math.sqrt(
+      Math.pow(x - middleX, 2) + Math.pow(y - middleY, 2)
+    );
+    const radians = Math.atan2(middleY - y, middleX - x);
+
+    let angle = radians * (180 / Math.PI);
+    while (angle < 0) angle += 360;
+    while (angle > 360) angle -= 360;
+
+    if (angle < minAngle) minAngle = angle;
+    if (angle > maxAngle) maxAngle = angle;
+
+    if (radius < minRadius) minRadius = radius;
+    if (radius > maxRadius) maxRadius = radius;
+
+    led.angle = angle;
+    led.radius = radius;
+  }
+
   return {
     duplicateIndices,
     gaps,
     height,
     input,
     leds,
+    maxAngle,
     maxIndex,
+    maxRadius,
     maxX,
     maxY,
     middleX,
     middleY,
+    minAngle,
     minIndex,
+    minRadius,
     minX,
     minY,
     width,

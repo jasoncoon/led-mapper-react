@@ -16,12 +16,16 @@ export interface LedMap {
   height: number;
   input: string;
   leds: LED[];
+  maxAngle: number;
   maxIndex: number;
+  maxRadius: number;
   maxX: number;
   maxY: number;
   middleX: number;
   middleY: number;
+  minAngle: number;
   minIndex: number;
+  minRadius: number;
   minX: number;
   minY: number;
   width: number;
