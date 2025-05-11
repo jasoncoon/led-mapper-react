@@ -16,6 +16,7 @@
     "antd": "^5.24.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-json-tree": "^0.20.0",
     "react-zoom-pan-pinch": "^3.7.0"
   },
   "devDependencies": {

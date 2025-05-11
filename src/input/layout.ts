@@ -47,5 +47,6 @@ export function parseLayoutText(input: string): LedMap {
       });
     }
   }
+
   return loadLedMap(leds, input);
 }

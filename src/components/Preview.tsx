@@ -20,7 +20,7 @@ type PatternType = typeof PatternNames[number];
 export default function Preview({ ledMap }: { ledMap?: LedMap }) {
   const [drawType, setDrawType] = useState<'leds' | 'numbers'>('numbers');
   const [drawFps, setDrawFps] = useState<boolean>(true);
-  const [pattern, setPattern] = useState<PatternType>('rainbow index');
+  const [pattern, setPattern] = useState<PatternType>('rainbow out');
 
   let elapsed = 0;
   let fps = 0;
@@ -110,6 +110,7 @@ export default function Preview({ ledMap }: { ledMap?: LedMap }) {
         context.beginPath();
         context.ellipse(x + ledCenter, y + ledCenter, ledCenter, ledCenter, 0, 0, Math.PI * 2, false);
         context.fill();
+        context.closePath();
       }
 
       if (drawType === 'numbers') {
@@ -144,6 +145,7 @@ export default function Preview({ ledMap }: { ledMap?: LedMap }) {
           size="small"
           value={drawType}
         />
+        <span>Pattern: </span>
         <Select popupMatchSelectWidth={false} value={pattern} onChange={(value) => { setPattern(value); }}
           options={PatternNames.map(patternName => ({ key: patternName, label: patternName, value: patternName }))} />
         <Checkbox checked={drawFps} onChange={(e) => { setDrawFps(e.target.checked); }}>Show FPS</Checkbox>
@@ -151,7 +153,7 @@ export default function Preview({ ledMap }: { ledMap?: LedMap }) {
       <Canvas<CanvasRenderingContext2D>
         contextType={'2d'}
         draw={onDraw}
-        style={{ minHeight: 400, height: 'calc(100% - 32px)', width: '100%' }} // TODO: auto resize canvas
+        style={{ minHeight: 400, height: 'calc(100% - 32px)', width: '100%' }} // TODO: fix canvas not resizing
       />
     </Space>
   );

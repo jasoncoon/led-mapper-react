@@ -100,6 +100,44 @@ export function loadLedMap(leds: LED[], input: string): LedMap {
   const middleX = (maxX - minX) / 2;
   const middleY = (maxY - minY) / 2;
 
+  const { minAngle, maxAngle, minRadius, maxRadius } = calculateAngleAndRadius(
+    leds,
+    middleX,
+    middleY
+  );
+
+  return {
+    duplicateIndices,
+    gaps,
+    height,
+    input,
+    leds,
+    maxAngle,
+    maxIndex,
+    maxRadius,
+    maxX,
+    maxY,
+    middleX,
+    middleY,
+    minAngle,
+    minIndex,
+    minRadius,
+    minX,
+    minY,
+    width,
+  };
+}
+
+export function calculateAngleAndRadius(
+  leds: LED[],
+  middleX: number,
+  middleY: number
+): {
+  maxAngle: number;
+  maxRadius: number;
+  minAngle: number;
+  minRadius: number;
+} {
   let minAngle, minRadius;
   let maxAngle, maxRadius;
 
@@ -132,23 +170,9 @@ export function loadLedMap(leds: LED[], input: string): LedMap {
   }
 
   return {
-    duplicateIndices,
-    gaps,
-    height,
-    input,
-    leds,
     maxAngle,
-    maxIndex,
     maxRadius,
-    maxX,
-    maxY,
-    middleX,
-    middleY,
     minAngle,
-    minIndex,
     minRadius,
-    minX,
-    minY,
-    width,
   };
 }
